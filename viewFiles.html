@@ -1,0 +1,1237 @@
+{% extends 'dashboard.html' %}
+{% load humanize %}
+
+{% block main %}
+<div class="files-container" style="margin-top: 100px;">
+    <!-- Header Section -->
+    <div class="files-header">
+        <div class="header-content">
+            <h1 class="files-title">
+                <svg class="files-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                My Files
+            </h1>
+            <p class="files-subtitle">Manage and access your securely uploaded files</p>
+        </div>
+        <div class="header-stats">
+            <div class="stat-card">
+                <div class="stat-number">{{ files.count }}</div>
+                <div class="stat-label">Total Files</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">{{ total_size|default:"0" }}</div>
+                <div class="stat-label">Storage Used</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Controls & Filters -->
+    <div class="files-controls">
+        <div class="search-box">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <input type="text" id="fileSearch" placeholder="Search files..." class="search-input">
+        </div>
+        
+        <div class="filter-controls">
+            <select id="categoryFilter" class="filter-select">
+                <option value="all">All Categories</option>
+                <option value="files">Documents & Files</option>
+                <option value="videos">Videos & Movies</option>
+                <option value="audio">Music & Audio</option>
+                <option value="general">General Files</option>
+            </select>
+            
+            <select id="sortFilter" class="filter-select">
+                <option value="newest">Newest First</option>
+                <option value="oldest">Oldest First</option>
+                <option value="largest">Largest First</option>
+                <option value="smallest">Smallest First</option>
+                <option value="name">Name A-Z</option>
+            </select>
+            
+            <button class="view-toggle" id="viewToggle">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Files Grid/List View -->
+    <div class="files-content">
+        {% if files %}
+            <div class="files-grid" id="filesView">
+                {% for file in files %}
+                <div class="file-card" data-category="{{ file.category }}" data-size="{{ file.file_size }}" data-date="{{ file.uploaded_at|date:'U' }}" data-name="{{ file.original_name|lower }}">
+                    <div class="file-card-header">
+                        <div class="file-icon {{ file.category }}">
+                            {% if file.category == 'files' %}
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            {% elif file.category == 'videos' %}
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M23 7L16 12L23 17V7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            {% elif file.category == 'audio' %}
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M9 18V5L21 3V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="2"/>
+                                    <circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            {% else %}
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            {% endif %}
+                        </div>
+                        <div class="file-actions">
+                            <a class="action-btn download-btn" data-file-id="{{ file.id }}" href="{% url 'download_file' file.id %}" title="Download">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                            <a class="action-btn delete-btn" data-file-id="{{ file.id }}" href="{% url 'delete_file' file.id %}" title="Delete">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 6H5H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 21 17 21H7C6.46957 21 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="file-card-content">
+                        <h3 class="file-name" title="{{ file.original_name }}">{{ file.original_name|truncatechars:30 }}</h3>
+                        <div class="file-meta">
+                            <span class="file-size">{{ file.formatted_size }}</span>
+                            <span class="file-date">{{ file.uploaded_at|naturaltime }}</span>
+                        </div>
+                        <div class="file-category {{ file.category }}">
+                            {{ file.get_category_display }}
+                        </div>
+                    </div>
+                    
+                    <div class="file-card-footer">
+                        <div class="file-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- Empty State -->
+            <div class="empty-state">
+                <div class="empty-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h3>No Files Uploaded Yet</h3>
+                <p>Start by uploading your first secure file</p>
+                <a href="{% url 'upload_file' %}" class="upload-cta-btn">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 8L12 3L7 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Upload Your First File
+                </a>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Load More Section -->
+    {% if files.has_next %}
+    <div class="load-more-section">
+        <button class="load-more-btn" id="loadMore">
+            Load More Files
+        </button>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal" id="deleteModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Delete File</h3>
+            <button class="modal-close" id="modalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete this file? This action cannot be undone.</p>
+            <div class="file-preview" id="filePreview">
+                <!-- File preview will be inserted here -->
+            </div>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-secondary" id="cancelDelete">Cancel</button>
+            <button class="btn-danger" id="confirmDelete">Delete File</button>
+        </div>
+    </div>
+</div>
+
+<style>
+.files-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+/* Header Styles */
+.files-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.header-content {
+    flex: 1;
+}
+
+.files-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: clamp(2rem, 4vw, 3rem);
+    background: linear-gradient(135deg, #e0a3ff 0%, #ff69b4 50%, #9370db 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 10px;
+}
+
+.files-icon {
+    width: 32px;
+    height: 32px;
+    color: #e0a3ff;
+}
+
+.files-subtitle {
+    font-size: 1.2rem;
+    color: #cccccc;
+    opacity: 0.8;
+}
+
+.header-stats {
+    display: flex;
+    gap: 20px;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    min-width: 120px;
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: bold;
+    background: linear-gradient(135deg, #e0a3ff, #ff69b4);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 5px;
+}
+
+.stat-label {
+    color: #cccccc;
+    font-size: 0.9rem;
+}
+
+/* Controls Styles */
+.files-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.search-box {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+}
+
+.search-box svg {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 18px;
+    height: 18px;
+    color: #888;
+}
+
+.search-input {
+    width: 100%;
+    padding: 12px 15px 12px 45px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: rgba(224, 163, 255, 0.5);
+    box-shadow: 0 0 0 2px rgba(224, 163, 255, 0.1);
+}
+
+.search-input::placeholder {
+    color: #888;
+}
+
+.filter-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.filter-select {
+    padding: 12px 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: #ffffff;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: rgba(224, 163, 255, 0.5);
+}
+
+.view-toggle {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #cccccc;
+}
+
+.view-toggle:hover {
+    border-color: rgba(224, 163, 255, 0.3);
+    color: #e0a3ff;
+}
+
+.view-toggle svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Files Grid Styles */
+.files-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.file-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.file-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(224, 163, 255, 0.3);
+    box-shadow: 0 20px 40px rgba(224, 163, 255, 0.1);
+}
+
+.file-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+}
+
+.file-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.file-icon.files {
+    background: linear-gradient(135deg, rgba(224, 163, 255, 0.2), rgba(255, 105, 180, 0.2));
+}
+
+.file-icon.videos {
+    background: linear-gradient(135deg, rgba(255, 105, 180, 0.2), rgba(147, 112, 219, 0.2));
+}
+
+.file-icon.audio {
+    background: linear-gradient(135deg, rgba(147, 112, 219, 0.2), rgba(224, 163, 255, 0.2));
+}
+
+.file-icon.general {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(224, 163, 255, 0.1));
+}
+
+.file-icon svg {
+    width: 24px;
+    height: 24px;
+    color: #e0a3ff;
+}
+
+.file-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #cccccc;
+}
+
+.action-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(224, 163, 255, 0.3);
+    color: #e0a3ff;
+}
+
+.action-btn svg {
+    width: 16px;
+    height: 16px;
+}
+
+.delete-btn:hover {
+    color: #ff4444;
+    border-color: rgba(255, 68, 68, 0.3);
+}
+
+.file-card-content {
+    margin-bottom: 20px;
+}
+
+.file-name {
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    word-break: break-word;
+}
+
+.file-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-size: 0.85rem;
+}
+
+.file-size {
+    color: #e0a3ff;
+    font-weight: 500;
+}
+
+.file-date {
+    color: #888;
+}
+
+.file-category {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.file-category.files {
+    background: rgba(224, 163, 255, 0.1);
+    color: #e0a3ff;
+    border: 1px solid rgba(224, 163, 255, 0.2);
+}
+
+.file-category.videos {
+    background: rgba(255, 105, 180, 0.1);
+    color: #ff69b4;
+    border: 1px solid rgba(255, 105, 180, 0.2);
+}
+
+.file-category.audio {
+    background: rgba(147, 112, 219, 0.1);
+    color: #9370db;
+    border: 1px solid rgba(147, 112, 219, 0.2);
+}
+
+.file-category.general {
+    background: rgba(255, 255, 255, 0.1);
+    color: #cccccc;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.file-card-footer {
+    margin-top: 15px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e0a3ff, #ff69b4);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    color: #666;
+}
+
+.empty-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 30px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.empty-icon svg {
+    width: 40px;
+    height: 40px;
+    color: #666;
+}
+
+.empty-state h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #cccccc;
+}
+
+.empty-state p {
+    margin-bottom: 30px;
+    color: #888;
+}
+
+.upload-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, #e0a3ff 0%, #ff69b4 50%, #9370db 100%);
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(224, 163, 255, 0.3);
+}
+
+.upload-cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(224, 163, 255, 0.4);
+}
+
+.upload-cta-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* Load More Section */
+.load-more-section {
+    text-align: center;
+    margin-top: 40px;
+}
+
+.load-more-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #cccccc;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.load-more-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(224, 163, 255, 0.3);
+    color: #e0a3ff;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 25px 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header h3 {
+    color: #ffffff;
+    margin: 0;
+    font-size: 1.3rem;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    color: #cccccc;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close:hover {
+    color: #ffffff;
+}
+
+.modal-body {
+    padding: 30px;
+}
+
+.modal-body p {
+    color: #cccccc;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.file-preview {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 15px;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    padding: 20px 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-secondary, .btn-danger {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.05);
+    color: #cccccc;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #ff5555, #dd0000);
+    transform: translateY(-1px);
+}
+
+/* List View */
+.files-grid.list-view {
+    grid-template-columns: 1fr;
+}
+
+.files-grid.list-view .file-card {
+    display: flex;
+    align-items: center;
+    padding: 20px 25px;
+}
+
+.files-grid.list-view .file-card-header {
+    margin-bottom: 0;
+    margin-right: 25px;
+    flex-shrink: 0;
+}
+
+.files-grid.list-view .file-card-content {
+    flex: 1;
+    margin-bottom: 0;
+    margin-right: 25px;
+}
+
+.files-grid.list-view .file-card-content .file-name {
+    margin-bottom: 5px;
+}
+
+.files-grid.list-view .file-card-content .file-meta {
+    margin-bottom: 5px;
+}
+
+.files-grid.list-view .file-card-footer {
+    margin-top: 0;
+    width: 100px;
+    flex-shrink: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .files-container {
+        padding: 20px 15px;
+    }
+    
+    .files-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+    
+    .header-stats {
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .files-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .search-box {
+        max-width: none;
+    }
+    
+    .filter-controls {
+        justify-content: space-between;
+    }
+    
+    .files-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .files-grid.list-view .file-card {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+    }
+    
+    .files-grid.list-view .file-card-header {
+        margin-right: 0;
+        margin-bottom: 15px;
+        justify-content: center;
+    }
+    
+    .files-grid.list-view .file-card-content {
+        margin-right: 0;
+        margin-bottom: 15px;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 20px;
+    }
+    
+    .modal-actions {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .files-title {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .files-icon {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .stat-card {
+        min-width: 100px;
+        padding: 15px;
+    }
+    
+    .stat-number {
+        font-size: 1.5rem;
+    }
+    
+    .file-card {
+        padding: 20px;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileSearch = document.getElementById('fileSearch');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const sortFilter = document.getElementById('sortFilter');
+    const viewToggle = document.getElementById('viewToggle');
+    const filesView = document.getElementById('filesView');
+    const deleteModal = document.getElementById('deleteModal');
+    const modalClose = document.getElementById('modalClose');
+    const cancelDelete = document.getElementById('cancelDelete');
+    const confirmDelete = document.getElementById('confirmDelete');
+    const filePreview = document.getElementById('filePreview');
+    const loadMoreBtn = document.getElementById('loadMore');
+    
+    let currentDeleteFileId = null;
+    let isListView = false;
+    let currentPage = 1;
+    let isLoading = false;
+
+    // Search functionality
+    fileSearch.addEventListener('input', filterFiles);
+    categoryFilter.addEventListener('change', filterFiles);
+    sortFilter.addEventListener('change', sortFiles);
+    
+    // View toggle
+    viewToggle.addEventListener('click', toggleView);
+    
+    // Delete functionality
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const fileId = this.getAttribute('data-file-id');
+            const fileCard = this.closest('.file-card');
+            const fileName = fileCard.querySelector('.file-name').textContent;
+            const fileCategory = fileCard.querySelector('.file-category').textContent;
+            const fileSize = fileCard.querySelector('.file-size').textContent;
+            
+            showDeleteModal(fileId, fileName, fileCategory, fileSize);
+        });
+    });
+    
+    // Download functionality
+    document.querySelectorAll('.download-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const fileId = this.getAttribute('data-file-id');
+            downloadFile(fileId);
+        });
+    });
+    
+    // Modal functionality
+    modalClose.addEventListener('click', closeModal);
+    cancelDelete.addEventListener('click', closeModal);
+    
+    confirmDelete.addEventListener('click', function() {
+        if (currentDeleteFileId) {
+            deleteFile(currentDeleteFileId);
+        }
+    });
+    
+    // Load more functionality
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', loadMoreFiles);
+    }
+    
+    function filterFiles() {
+        const searchTerm = fileSearch.value.toLowerCase();
+        const category = categoryFilter.value;
+        const fileCards = document.querySelectorAll('.file-card');
+        
+        fileCards.forEach(card => {
+            const fileName = card.getAttribute('data-name');
+            const fileCategory = card.getAttribute('data-category');
+            const matchesSearch = fileName.includes(searchTerm);
+            const matchesCategory = category === 'all' || fileCategory === category;
+            
+            if (matchesSearch && matchesCategory) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+    
+    function sortFiles() {
+        const sortBy = sortFilter.value;
+        const filesView = document.getElementById('filesView');
+        const fileCards = Array.from(filesView.querySelectorAll('.file-card'));
+        
+        fileCards.sort((a, b) => {
+            switch(sortBy) {
+                case 'newest':
+                    return parseInt(b.getAttribute('data-date')) - parseInt(a.getAttribute('data-date'));
+                case 'oldest':
+                    return parseInt(a.getAttribute('data-date')) - parseInt(b.getAttribute('data-date'));
+                case 'largest':
+                    return parseInt(b.getAttribute('data-size')) - parseInt(a.getAttribute('data-size'));
+                case 'smallest':
+                    return parseInt(a.getAttribute('data-size')) - parseInt(b.getAttribute('data-size'));
+                case 'name':
+                    return a.getAttribute('data-name').localeCompare(b.getAttribute('data-name'));
+                default:
+                    return 0;
+            }
+        });
+        
+        // Re-append sorted cards
+        fileCards.forEach(card => filesView.appendChild(card));
+    }
+    
+    function toggleView() {
+        isListView = !isListView;
+        if (isListView) {
+            filesView.classList.add('list-view');
+            viewToggle.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8 6H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M8 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M8 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M3 6H3.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M3 12H3.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    <path d="M3 18H3.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            `;
+        } else {
+            filesView.classList.remove('list-view');
+            viewToggle.innerHTML = `
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="2"/>
+                </svg>
+            `;
+        }
+    }
+    
+    function showDeleteModal(fileId, fileName, category, size) {
+        currentDeleteFileId = fileId;
+        filePreview.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div class="file-icon ${category}" style="width: 40px; height: 40px;">
+                    ${getFileIcon(category)}
+                </div>
+                <div>
+                    <div style="color: #ffffff; font-weight: 500; margin-bottom: 5px;">${fileName}</div>
+                    <div style="color: #888; font-size: 0.9rem;">${category} • ${size}</div>
+                </div>
+            </div>
+        `;
+        deleteModal.classList.add('active');
+    }
+    
+    function closeModal() {
+        deleteModal.classList.remove('active');
+        currentDeleteFileId = null;
+    }
+    
+    function getFileIcon(category) {
+        const icons = {
+            'files': `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>`,
+            'videos': `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M23 7L16 12L23 17V7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+            </svg>`,
+            'audio': `<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 18V5L21 3V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="2"/>
+                <circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="2"/>
+            </svg>`
+        };
+        return icons[category] || icons['files'];
+    }
+    
+    function deleteFile(fileId) {
+        // Show loading state
+        confirmDelete.innerHTML = `
+            <svg style="animation: spin 2s linear infinite;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 18V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4.93 4.93L7.76 7.76" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M16.24 16.24L19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M2 12H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M18 12H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4.93 19.07L7.76 16.24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Deleting...
+        `;
+        confirmDelete.disabled = true;
+        
+        // Simulate API call
+        setTimeout(() => {
+            // In a real application, you would make an AJAX call here
+            // fetch(`/files/delete/${fileId}/`, { method: 'DELETE' })
+            
+            // Remove the file card from DOM
+            const fileCard = document.querySelector(`[data-file-id="${fileId}"]`).closest('.file-card');
+            if (fileCard) {
+                fileCard.style.opacity = '0';
+                fileCard.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    fileCard.remove();
+                    updateFileStats();
+                    checkEmptyState();
+                }, 300);
+            }
+            
+            closeModal();
+            showMessage('File deleted successfully', 'success');
+        }, 1000);
+    }
+    
+    function downloadFile(fileId) {
+        // Show downloading state
+        const downloadBtn = document.querySelector(`[data-file-id="${fileId}"]`);
+        const originalHTML = downloadBtn.innerHTML;
+        
+        downloadBtn.innerHTML = `
+            <svg style="animation: spin 2s linear infinite;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 18V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4.93 4.93L7.76 7.76" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M16.24 16.24L19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M2 12H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M18 12H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4.93 19.07L7.76 16.24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        `;
+        downloadBtn.disabled = true;
+        
+        // Simulate download
+        setTimeout(() => {
+            // In a real application, you would trigger the download
+            // window.location.href = `/files/download/${fileId}/`;
+            
+            downloadBtn.innerHTML = originalHTML;
+            downloadBtn.disabled = false;
+            showMessage('Download started', 'success');
+        }, 1500);
+    }
+    
+    function loadMoreFiles() {
+        if (isLoading) return;
+        
+        isLoading = true;
+        loadMoreBtn.innerHTML = `
+            <svg style="animation: spin 2s linear infinite;" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 18V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4.93 4.93L7.76 7.76" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M16.24 16.24L19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M2 12H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M18 12H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4.93 19.07L7.76 16.24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Loading...
+        `;
+        loadMoreBtn.disabled = true;
+        
+        // Simulate API call to load more files
+        setTimeout(() => {
+            // In a real application, you would fetch the next page
+            // and append the new files to the grid
+            
+            currentPage++;
+            if (currentPage >= 3) { // Simulate no more pages
+                loadMoreBtn.style.display = 'none';
+            } else {
+                loadMoreBtn.innerHTML = 'Load More Files';
+                loadMoreBtn.disabled = false;
+            }
+            
+            isLoading = false;
+            updateFileStats();
+        }, 1000);
+    }
+    
+    function updateFileStats() {
+        const fileCards = document.querySelectorAll('.file-card');
+        const totalFiles = fileCards.length;
+        
+        // Update total files count
+        const statNumber = document.querySelector('.stat-number');
+        if (statNumber) {
+            statNumber.textContent = totalFiles;
+        }
+        
+        // You could also calculate total storage used here
+    }
+    
+    function checkEmptyState() {
+        const fileCards = document.querySelectorAll('.file-card');
+        if (fileCards.length === 0) {
+            filesView.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>No Files Found</h3>
+                    <p>Try adjusting your search or filters</p>
+                    <button class="upload-cta-btn" onclick="clearFilters()">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M17 8L12 3L7 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Clear Filters
+                    </button>
+                </div>
+            `;
+        }
+    }
+    
+    function showMessage(message, type) {
+        // Create message element
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `alert alert-${type}`;
+        messageDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            color: ${type === 'success' ? '#00ff00' : '#ff4444'};
+            background: ${type === 'success' ? 'rgba(0, 255, 0, 0.1)' : 'rgba(255, 0, 0, 0.1)'};
+            border: 1px solid ${type === 'success' ? 'rgba(0, 255, 0, 0.3)' : 'rgba(255, 0, 0, 0.3)'};
+            z-index: 1001;
+            max-width: 300px;
+            backdrop-filter: blur(20px);
+        `;
+        messageDiv.textContent = message;
+        
+        document.body.appendChild(messageDiv);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            messageDiv.remove();
+        }, 3000);
+    }
+    
+    // Close modal when clicking outside
+    deleteModal.addEventListener('click', function(e) {
+        if (e.target === deleteModal) {
+            closeModal();
+        }
+    });
+});
+
+// Global function to clear filters
+function clearFilters() {
+    document.getElementById('fileSearch').value = '';
+    document.getElementById('categoryFilter').value = 'all';
+    document.getElementById('sortFilter').value = 'newest';
+    
+    // Trigger filter update
+    const event = new Event('change');
+    document.getElementById('categoryFilter').dispatchEvent(event);
+    document.getElementById('fileSearch').dispatchEvent(new Event('input'));
+}
+</script>
+{% endblock %}
+
+{% block about %}{% endblock %}
+{% block services %}{% endblock %}
+{% block footer %}{% endblock %}

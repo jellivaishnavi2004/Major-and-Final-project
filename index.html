@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heisenberg SecureSign</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="/static/templatemo-neural-style.css" rel="stylesheet">
+<!--
+
+TemplateMo 597 Neural Glass
+
+https://templatemo.com/tm-597-neural-glass
+
+-->
+    <style>
+       
+    </style>
+</head>
+<body>
+    <!-- Epic Neural Background -->
+    <div class="neural-background"></div>
+    
+    <!-- Floating Geometric Shapes -->
+    <div class="geometric-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <!-- Neural Network Lines -->
+    <div class="neural-lines">
+        <div class="neural-line"></div>
+        <div class="neural-line"></div>
+        <div class="neural-line"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="glass">
+        {% block nav %}
+        <nav>
+            <a href="#home" class="logo">
+                <svg class="logo-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#e0a3ff"/>
+                            <stop offset="50%" style="stop-color:#ff69b4"/>
+                            <stop offset="100%" style="stop-color:#9370db"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="50" cy="30" r="8" fill="url(#logoGradient)" opacity="0.8">
+                        <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="30" cy="60" r="6" fill="url(#logoGradient)" opacity="0.6">
+                        <animate attributeName="opacity" values="0.6;1;0.6" dur="2.5s" repeatCount="indefinite"/>
+                    </circle>
+                    <circle cx="70" cy="65" r="7" fill="url(#logoGradient)" opacity="0.7">
+                        <animate attributeName="opacity" values="0.7;1;0.7" dur="1.8s" repeatCount="indefinite"/>
+                    </circle>
+                    <line x1="50" y1="30" x2="30" y2="60" stroke="url(#logoGradient)" stroke-width="2" opacity="0.6">
+                        <animate attributeName="opacity" values="0.6;1;0.6" dur="3s" repeatCount="indefinite"/>
+                    </line>
+                    <line x1="50" y1="30" x2="70" y2="65" stroke="url(#logoGradient)" stroke-width="2" opacity="0.6">
+                        <animate attributeName="opacity" values="0.6;1;0.6" dur="2.2s" repeatCount="indefinite"/>
+                    </line>
+                    <line x1="30" y1="60" x2="70" y2="65" stroke="url(#logoGradient)" stroke-width="2" opacity="0.6">
+                        <animate attributeName="opacity" values="0.6;1;0.6" dur="2.8s" repeatCount="indefinite"/>
+                    </line>
+                </svg>
+                Heisenberg SecureSign
+            </a>
+            <ul class="nav-links">
+                <li><a href="#">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#Services">Services</a></li>
+                <li><a href="{% url 'register' %}">Register</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
+            </ul>
+            </ul>
+            <div class="mobile-menu-toggle">
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+            </div>
+        </nav>
+        {% endblock %}
+        <div class="mobile-nav">
+            <a href="#">Home</a>
+            <a href="#about">About</a>
+            <a href="#Services">Services</a>
+            <li><a href="{% url 'register' %}">Register</a></li>
+                <li><a href="{% url 'login' %}" target="_blank" class="external-link">Login</a></li>
+        </div>
+    </header>
+
+    <!-- Section 1: Hero -->
+    <section class="hero" id="home">
+        {% block main %}
+        <div class="hero-content">
+            <div class="hero-subtitle">Welcome to the Future</div>
+            <h1>Heisenberg SecureSign</h1>
+            
+            <div class="hero-description">
+                <p>Heisenberg SecureSign uses the Heisenberg group to generate secure digital signatures, ensuring data integrity and resistance to quantum attacks for secure communication.</p>
+            </div>
+
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <span class="hero-stat-number">99.9%</span>
+                    <span class="hero-stat-label">SecureSign</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">∞</span>
+                    <span class="hero-stat-label">Processing Power</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">0.001</span>
+                    <span class="hero-stat-label">Latency (ms)</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="hero-stat-number">24/7</span>
+                    <span class="hero-stat-label">Access</span>
+                </div>
+            </div>
+            
+            <div class="cta-buttons">
+                <a href="#features" class="cta-button">Explore</a>
+            </div>
+        </div>
+        {% endblock %}
+    </section>
+
+    <!-- Section 2: Diagonal Features -->
+    <section class="features" id="about">
+        {% block about %}
+        <div class="features-container">
+            <h2 class="section-title">ABOUT</h2>
+            <div class="diagonal-grid">
+                <div class="feature-row">
+                    <div class="feature-content glass">
+                        <h3>Heisenberg Group-Based Cryptography</h3>
+                        <p>Utilizes the non-commutative Heisenberg group to generate digital signatures, making the system resistant to traditional cryptographic attacks.</p>
+                    </div>
+                    <div class="feature-visual glass"></div>
+                </div>
+                
+                <div class="feature-row">
+                    <div class="feature-content glass">
+                        <h3>Post-Quantum Security</h3>
+                        <p>The algorithm is designed to be robust against quantum computing threats, providing future-proof security in an era of evolving cryptography.</p>
+                    </div>
+                    <div class="feature-visual glass"></div>
+                </div>
+                
+                <div class="feature-row">
+                    <div class="feature-content glass">
+                        <h3>Efficient Signature Generation</h3>
+                        <p>Despite larger signature sizes, the scheme performs competitively in terms of signature generation and verification times when compared to traditional systems like ECDSA and RSA.</p>
+                    </div>
+                    <div class="feature-visual glass"></div>
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </section>
+
+    <!-- Section 3: Hexagonal Showcase -->
+    <section class="showcase" id="Services">
+        {% block services %}
+        <h2 class="section-title">SERVICES</h2>
+        <div class="hexagon-container">
+            <div class="hexagon">
+                <div class="hexagon-inner glass">
+                    <div class="hexagon-icon">🔮</div>
+                    <h4>Digital Signature Generation</h4>
+                   
+                </div>
+            </div>
+            <div class="hexagon">
+                <div class="hexagon-inner glass">
+                    <div class="hexagon-icon">🛡️</div>
+                    <h4>Signature Verification</h4>
+                    
+                </div>
+            </div>
+            <div class="hexagon">
+                <div class="hexagon-inner glass">
+                    <div class="hexagon-icon">🚀</div>
+                    <h4>Post-Quantum Cryptographic Security</h4>
+                    
+                </div>
+            </div>
+            <div class="hexagon">
+                <div class="hexagon-inner glass">
+                    <div class="hexagon-icon">💎</div>
+                    <h4>Secure Communication Protocols</h4>
+                    
+                </div>
+            </div>
+        </div>
+        {% endblock %}
+    </section>
+
+    <!-- Section 4: Timeline -->
+    <!-- Section 5: Contact -->
+    <!-- Footer -->
+    <footer>
+        {% block footer %}
+        <div class="footer-content">
+            <div class="footer-copyright">
+                <p>&copy; 2025 Heisenberg SecureSign. All rights reserved across dimensions.</p>
+            </div>
+            <div class="footer-design">
+                Design: <a href="#" target="_blank" rel="nofollow noopener">Heisenberg SecureSign</a> | 
+               Heisenberg SecureSign 
+                <a href="#">Heisenberg SecureSign</a>
+            </div>
+        </div>
+        {% endblock %}
+    </footer>
+<script src="/static/templatemo-neural-scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,1040 @@
+{% extends 'dashboard.html' %}
+
+{% block main %}
+<div class="upload-container">
+    <!-- Upload Header -->
+    <div class="upload-header">
+        <h1 class="upload-title">
+            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M14 2V8H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Secure File Upload
+        </h1>
+        <p class="upload-subtitle">Protect your files with Heisenberg's advanced encryption technology</p>
+    </div>
+
+    <!-- Upload Form -->
+    <form id="uploadForm" method="post" enctype="multipart/form-data" class="upload-form">
+        {% csrf_token %}
+        
+        <!-- Upload Cards Grid -->
+        <div class="upload-grid">
+            <!-- File Upload Card -->
+            <div class="upload-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V9L13 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M13 2V9H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <h3>Documents & Files</h3>
+                </div>
+                <div class="card-content">
+                    <p>Upload PDFs, Word documents, images, and other files</p>
+                    <div class="file-types">
+                        <span class="file-tag">PDF</span>
+                        <span class="file-tag">DOC</span>
+                        <span class="file-tag">PPT</span>
+                        <span class="file-tag">ZIP</span>
+                    </div>
+                </div>
+                <div class="upload-area" id="fileUpload">
+                    <div class="upload-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M17 8L12 3L7 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <p>Drop files here or click to browse</p>
+                        <span class="file-size">Max 100MB per file</span>
+                    </div>
+                    <input type="file" name="files" multiple class="file-input" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.zip,.rar,.jpg,.jpeg,.png">
+                </div>
+            </div>
+
+            <!-- Video Upload Card -->
+            <div class="upload-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M23 7L16 12L23 17V7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3>Videos & Movies</h3>
+                </div>
+                <div class="card-content">
+                    <p>Upload videos, movies, and video clips</p>
+                    <div class="file-types">
+                        <span class="file-tag">MP4</span>
+                        <span class="file-tag">AVI</span>
+                        <span class="file-tag">MOV</span>
+                        <span class="file-tag">MKV</span>
+                    </div>
+                </div>
+                <div class="upload-area" id="videoUpload">
+                    <div class="upload-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M23 7L16 12L23 17V7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <rect x="1" y="5" width="15" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        <p>Drop videos here or click to browse</p>
+                        <span class="file-size">Max 2GB per video</span>
+                    </div>
+                    <input type="file" name="videos" multiple class="file-input" accept=".mp4,.avi,.mov,.mkv,.wmv,.flv,.webm">
+                </div>
+            </div>
+
+            <!-- Music Upload Card -->
+            <div class="upload-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 18V5L21 3V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="2"/>
+                            <circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <h3>Music & Audio</h3>
+                </div>
+                <div class="card-content">
+                    <p>Upload music files, podcasts, and audio recordings</p>
+                    <div class="file-types">
+                        <span class="file-tag">MP3</span>
+                        <span class="file-tag">WAV</span>
+                        <span class="file-tag">FLAC</span>
+                        <span class="file-tag">AAC</span>
+                    </div>
+                </div>
+                <div class="upload-area" id="musicUpload">
+                    <div class="upload-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 18V5L21 3V16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="6" cy="18" r="3" stroke="currentColor" stroke-width="2"/>
+                            <circle cx="18" cy="16" r="3" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        <p>Drop audio files here or click to browse</p>
+                        <span class="file-size">Max 500MB per file</span>
+                    </div>
+                    <input type="file" name="audio" multiple class="file-input" accept=".mp3,.wav,.flac,.aac,.ogg,.m4a,.wma">
+                </div>
+            </div>
+        </div>
+
+        <!-- Upload Button -->
+        <div class="upload-actions">
+            <button type="submit" class="upload-btn" id="uploadBtn">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M17 8L12 3L7 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Start Secure Upload
+            </button>
+        </div>
+    </form>
+
+    <!-- Upload Progress Section -->
+    <div class="upload-progress-section">
+        <h3>Upload Queue</h3>
+        <div class="progress-list" id="progressList">
+            <div class="empty-queue">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <p>No files in queue</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Features -->
+    <div class="security-features">
+        <h3>Security Features</h3>
+        <div class="features-grid">
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 22S12 22 20 18C20 18 22 10 12 2C2 10 4 18 4 18C12 22 12 22 12 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h4>End-to-End Encryption</h4>
+                <p>All files are encrypted before upload and during storage</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M7 11V7C7 5.93913 7.42143 4.92172 8.17157 4.17157C8.92172 3.42143 9.93913 3 11 3H13C14.0609 3 15.0783 3.42143 15.8284 4.17157C16.5786 4.92172 17 5.93913 17 7V11" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </div>
+                <h4>Secure Storage</h4>
+                <p>Files stored in encrypted containers with military-grade security</p>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z" stroke="currentColor" stroke-width="2"/>
+                        <path d="M19.4 15C19.2669 15.3044 19.1333 15.6084 19 15.912C18.713 16.5304 18.426 17.1489 18.139 17.7674C17.6969 18.713 17.2548 19.6587 16.8127 20.6043C16.5177 21.2435 16.2227 21.8826 15.9277 22.5217C15.6455 23.1326 15.3632 23.7435 15.081 24.3543C14.845 24.863 14.609 25.3717 14.373 25.8804C14.209 26.2317 14.045 26.583 13.881 26.9343C13.6503 27.4313 13.4197 27.9283 13.189 28.4253L12.752 29.3386C12.584 29.7043 12.416 30.07 12.248 30.4357C12.1659 30.6189 12.0838 30.8021 12.0017 30.9852C11.8903 31.2345 11.7788 31.4837 11.6674 31.733C11.5017 32.1072 11.336 32.4814 11.1703 32.8557C11.0199 33.1948 10.8695 33.5339 10.7191 33.873C10.4003 34.5783 10.0815 35.2836 9.7627 35.9889C9.6283 36.3048 9.4939 36.6207 9.3595 36.9366C9.2071 37.2945 9.0547 37.6524 8.9023 38.0103L8.679 38.5362C8.5676 38.7945 8.4562 39.0527 8.3448 39.311C8.1783 39.6962 8.0118 40.0814 7.8453 40.4666C7.7339 40.7248 7.6225 40.9831 7.5111 41.2414C7.3446 41.6266 7.1781 42.0118 7.0116 42.397C6.9002 42.6553 6.7888 42.9135 6.6774 43.1718C6.5109 43.557 6.3444 43.9422 6.1779 44.3274C6.0665 44.5857 5.9551 44.8439 5.8437 45.1022C5.6772 45.4874 5.5107 45.8726 5.3442 46.2578C5.2328 46.5161 5.1214 46.7743 5.01 47.0326C4.8435 47.4178 4.677 47.803 4.5105 48.1882C4.3991 48.4465 4.2877 48.7047 4.1763 48.963C4.0098 49.3482 3.8433 49.7334 3.6768 50.1186H3.67676" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <h4>Quantum Resistance</h4>
+                <p>Protected against future quantum computing attacks</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.upload-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.upload-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.upload-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    font-size: clamp(2rem, 4vw, 3rem);
+    background: linear-gradient(135deg, #e0a3ff 0%, #ff69b4 50%, #9370db 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 15px;
+}
+
+.upload-icon {
+    width: 32px; /* Reduced from 40px */
+    height: 32px; /* Reduced from 40px */
+    color: #e0a3ff;
+}
+
+.upload-subtitle {
+    font-size: 1.2rem;
+    color: #cccccc;
+    opacity: 0.8;
+}
+
+.upload-form {
+    margin-bottom: 50px;
+}
+
+.upload-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-bottom: 50px;
+}
+
+.upload-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    transition: all 0.3s ease;
+}
+
+.upload-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(224, 163, 255, 0.3);
+    box-shadow: 0 20px 40px rgba(224, 163, 255, 0.1);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.card-icon {
+    width: 40px; /* Reduced from 50px */
+    height: 40px; /* Reduced from 50px */
+    background: linear-gradient(135deg, rgba(224, 163, 255, 0.2), rgba(255, 105, 180, 0.2));
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-icon svg {
+    width: 20px; /* Reduced from 24px */
+    height: 20px; /* Reduced from 24px */
+    color: #e0a3ff;
+}
+
+.card-header h3 {
+    font-size: 1.5rem;
+    color: #ffffff;
+    margin: 0;
+}
+
+.card-content {
+    margin-bottom: 25px;
+}
+
+.card-content p {
+    color: #cccccc;
+    margin-bottom: 15px;
+}
+
+.file-types {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.file-tag {
+    background: rgba(224, 163, 255, 0.1);
+    color: #e0a3ff;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    border: 1px solid rgba(224, 163, 255, 0.2);
+}
+
+.upload-area {
+    border: 2px dashed rgba(224, 163, 255, 0.3);
+    border-radius: 15px;
+    padding: 40px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.upload-area:hover {
+    border-color: rgba(224, 163, 255, 0.6);
+    background: rgba(224, 163, 255, 0.05);
+}
+
+.upload-area.dragover {
+    border-color: #e0a3ff;
+    background: rgba(224, 163, 255, 0.1);
+}
+
+.upload-area.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.upload-placeholder svg {
+    width: 36px; /* Reduced from 48px */
+    height: 36px; /* Reduced from 48px */
+    color: #e0a3ff;
+    margin-bottom: 15px;
+    opacity: 0.7;
+}
+
+.upload-placeholder p {
+    color: #cccccc;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+.file-size {
+    color: #888;
+    font-size: 0.9rem;
+}
+
+.file-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.encryption-options {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.encryption-options h3 {
+    color: #ffffff;
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+}
+
+.encryption-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.encryption-option {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.encryption-option:hover {
+    border-color: rgba(224, 163, 255, 0.3);
+    background: rgba(224, 163, 255, 0.05);
+}
+
+.encryption-option input[type="radio"],
+.encryption-option input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #e0a3ff;
+}
+
+.encryption-option label {
+    cursor: pointer;
+    flex: 1;
+}
+
+.encryption-option label strong {
+    display: block;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.encryption-option label span {
+    color: #cccccc;
+    font-size: 0.9rem;
+}
+
+.upload-actions {
+    text-align: center;
+}
+
+.upload-btn {
+    background: linear-gradient(135deg, #e0a3ff 0%, #ff69b4 50%, #9370db 100%);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(224, 163, 255, 0.3);
+}
+
+.upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(224, 163, 255, 0.4);
+}
+
+.upload-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.upload-btn svg {
+    width: 18px; /* Reduced from 20px */
+    height: 18px; /* Reduced from 20px */
+}
+
+.upload-progress-section {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 50px;
+}
+
+.upload-progress-section h3 {
+    color: #ffffff;
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+}
+
+.progress-list {
+    min-height: 100px;
+}
+
+.empty-queue {
+    text-align: center;
+    color: #666;
+    padding: 40px 20px;
+}
+
+.empty-queue svg {
+    width: 36px; /* Reduced from 48px */
+    height: 36px; /* Reduced from 48px */
+    margin-bottom: 15px;
+    opacity: 0.5;
+}
+
+.security-features {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 40px;
+}
+
+.security-features h3 {
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 1.8rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.feature-item {
+    text-align: center;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.feature-icon {
+    width: 50px; /* Reduced from 60px */
+    height: 50px; /* Reduced from 60px */
+    background: linear-gradient(135deg, rgba(224, 163, 255, 0.1), rgba(255, 105, 180, 0.1));
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+}
+
+.feature-icon svg {
+    width: 24px; /* Reduced from 28px */
+    height: 24px; /* Reduced from 28px */
+    color: #e0a3ff;
+}
+
+.feature-item h4 {
+    color: #ffffff;
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+}
+
+.feature-item p {
+    color: #cccccc;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Progress Items */
+.progress-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.progress-item.completed {
+    background: rgba(0, 255, 0, 0.1);
+    border-color: rgba(0, 255, 0, 0.3);
+}
+
+.progress-icon {
+    width: 36px; /* Reduced from 40px */
+    height: 36px; /* Reduced from 40px */
+    background: rgba(224, 163, 255, 0.1);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-icon svg {
+    width: 18px; /* Reduced from 20px */
+    height: 18px; /* Reduced from 20px */
+    color: #e0a3ff;
+}
+
+.progress-info {
+    flex: 1;
+}
+
+.progress-filename {
+    color: #ffffff;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.file-type {
+    color: #888;
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #e0a3ff, #ff69b4);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+}
+
+.progress-percent {
+    color: #e0a3ff;
+    font-size: 0.9rem;
+    font-weight: 600;
+    min-width: 50px;
+    text-align: right;
+}
+
+/* Uploading Indicator */
+.uploading-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #e0a3ff;
+    border-radius: 15px;
+    z-index: 10;
+}
+
+.uploading-indicator svg {
+    width: 20px; /* Reduced from 24px */
+    height: 20px; /* Reduced from 24px */
+    margin-bottom: 10px;
+}
+
+.uploading-text {
+    color: #cccccc;
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+/* Messages */
+.messages {
+    margin-bottom: 30px;
+}
+
+.alert {
+    padding: 15px 20px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+    border: 1px solid;
+}
+
+.alert-success {
+    background: rgba(0, 255, 0, 0.1);
+    border-color: rgba(0, 255, 0, 0.3);
+    color: #00ff00;
+}
+
+.alert-error {
+    background: rgba(255, 0, 0, 0.1);
+    border-color: rgba(255, 0, 0, 0.3);
+    color: #ff4444;
+}
+
+/* Animations */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .upload-container {
+        padding: 20px 15px;
+    }
+    
+    .upload-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .upload-card {
+        padding: 20px;
+    }
+    
+    .card-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 10px;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    
+    .security-features {
+        padding: 25px;
+    }
+    
+    .upload-progress-section {
+        padding: 20px;
+    }
+    
+    .progress-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+    
+    .progress-info {
+        width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .upload-title {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .upload-icon {
+        width: 28px; /* Adjusted for mobile */
+        height: 28px; /* Adjusted for mobile */
+    }
+    
+    .upload-subtitle {
+        font-size: 1rem;
+    }
+    
+    .upload-area {
+        padding: 30px 15px;
+    }
+    
+    .upload-placeholder p {
+        font-size: 1rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const uploadForm = document.getElementById('uploadForm');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const fileInputs = document.querySelectorAll('.file-input');
+    const uploadAreas = document.querySelectorAll('.upload-area');
+    let isUploading = false;
+
+    // File upload functionality
+    uploadAreas.forEach(area => {
+        const fileInput = area.querySelector('.file-input');
+        
+        // Click to browse
+        area.addEventListener('click', () => {
+            if (!isUploading) {
+                fileInput.click();
+            }
+        });
+        
+        // Drag and drop
+        area.addEventListener('dragover', (e) => {
+            if (!isUploading) {
+                e.preventDefault();
+                area.classList.add('dragover');
+            }
+        });
+        
+        area.addEventListener('dragleave', () => {
+            area.classList.remove('dragover');
+        });
+        
+        area.addEventListener('drop', (e) => {
+            if (!isUploading) {
+                e.preventDefault();
+                area.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                handleFiles(files, fileInput);
+            }
+        });
+        
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            if (!isUploading) {
+                handleFiles(e.target.files, fileInput);
+            }
+        });
+    });
+
+    function handleFiles(files, targetInput) {
+        if (files.length > 0) {
+            // Create a new DataTransfer to set files
+            const dt = new DataTransfer();
+            for (let file of files) {
+                dt.items.add(file);
+            }
+            targetInput.files = dt.files;
+            
+            // Add files to upload queue display
+            for (let file of files) {
+                addToUploadQueue(file, targetInput.name);
+            }
+        }
+    }
+
+    // Form submission
+    uploadForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const files = [];
+        
+        // Check if any files are selected
+        let hasFiles = false;
+        fileInputs.forEach(input => {
+            if (input.files.length > 0) {
+                hasFiles = true;
+                for (let file of input.files) {
+                    files.push(file);
+                }
+            }
+        });
+        
+        if (!hasFiles) {
+            showMessage('Please select at least one file to upload.', 'error');
+            return;
+        }
+        
+        // Start upload process
+        startUpload(formData, files);
+    });
+
+    function startUpload(formData, files) {
+        isUploading = true;
+        disableAllUploads();
+        
+        // Show progress for each file
+        files.forEach((file, index) => {
+            simulateUploadProgress(file, index, files.length);
+        });
+
+        // Actual AJAX upload
+        uploadFiles(formData);
+    }
+
+    async function uploadFiles(formData) {
+        try {
+            const response = await fetch('/upload/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                showMessage('Files uploaded!', 'success');
+                // Mark all uploads as complete
+                document.querySelectorAll('.progress-item').forEach(item => {
+                    item.classList.add('completed');
+                    const percentElement = item.querySelector('.progress-percent');
+                    percentElement.innerHTML = '<span style="color: #00ff00">✓ Complete</span>';
+                });
+                
+                // Clear form after successful upload
+                setTimeout(() => {
+                    uploadForm.reset();
+                    clearUploadQueue();
+                    enableAllUploads();
+                }, 2000);
+            } else {
+                throw new Error(result.error || 'Upload failed');
+            }
+        } catch (error) {
+            showMessage('Upload failed: ' + error.message, 'error');
+            enableAllUploads();
+        }
+    }
+
+    function simulateUploadProgress(file, index, totalFiles) {
+        const progressItem = document.querySelectorAll('.progress-item')[index];
+        if (!progressItem) return;
+
+        const progressFill = progressItem.querySelector('.progress-fill');
+        const progressPercent = progressItem.querySelector('.progress-percent');
+        let progress = 0;
+
+        const interval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress >= 90) { // Stop at 90% for real upload to complete
+                progress = 90;
+                clearInterval(interval);
+            }
+            
+            progressFill.style.width = `${progress}%`;
+            progressPercent.textContent = `${Math.round(progress)}%`;
+        }, 200);
+    }
+
+    function disableAllUploads() {
+        uploadBtn.disabled = true;
+        uploadBtn.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation: spin 2s linear infinite;">
+                <path d="M12 2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 18V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4.93 4.93L7.76 7.76" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M16.24 16.24L19.07 19.07" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M2 12H6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M18 12H22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M4.93 19.07L7.76 16.24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Uploading Files...
+        `;
+        
+        uploadAreas.forEach(area => {
+            area.style.opacity = '0.6';
+            area.style.cursor = 'not-allowed';
+            area.classList.add('disabled');
+        });
+    }
+
+    function enableAllUploads() {
+        isUploading = false;
+        uploadBtn.disabled = false;
+        uploadBtn.innerHTML = `
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M17 8L12 3L7 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Start Secure Upload
+        `;
+        
+        uploadAreas.forEach(area => {
+            area.style.opacity = '1';
+            area.style.cursor = 'pointer';
+            area.classList.remove('disabled');
+        });
+    }
+
+    function addToUploadQueue(file, uploadType) {
+        const progressList = document.getElementById('progressList');
+        const emptyQueue = progressList.querySelector('.empty-queue');
+        
+        if (emptyQueue) {
+            emptyQueue.remove();
+        }
+        
+        const progressItem = document.createElement('div');
+        progressItem.className = 'progress-item';
+        progressItem.innerHTML = `
+            <div class="progress-icon">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="progress-info">
+                <div class="progress-filename">${file.name}</div>
+                <div class="file-type">${uploadType.toUpperCase()} • ${formatFileSize(file.size)}</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="progress-percent">0%</div>
+        `;
+        
+        progressList.appendChild(progressItem);
+    }
+
+    function clearUploadQueue() {
+        const progressList = document.getElementById('progressList');
+        progressList.innerHTML = `
+            <div class="empty-queue">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 2H6C5.46957 2 4.96086 2.21071 4.58579 2.58579C4.21071 2.96086 4 3.46957 4 4V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V8L14 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 13H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M16 17H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M10 9H9H8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <p>No files in queue</p>
+            </div>
+        `;
+    }
+
+    function showMessage(message, type) {
+        // Remove existing messages
+        const existingMessages = document.querySelector('.messages');
+        if (existingMessages) {
+            existingMessages.remove();
+        }
+
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `messages`;
+        messageDiv.innerHTML = `
+            <div class="alert alert-${type}">
+                ${message}
+            </div>
+        `;
+
+        uploadForm.insertBefore(messageDiv, uploadForm.firstChild);
+
+        // Auto-remove success messages after 5 seconds
+        if (type === 'success') {
+            setTimeout(() => {
+                messageDiv.remove();
+            }, 5000);
+        }
+    }
+
+    function formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+});
+</script>
+{% endblock %}
+
+{% block about %}{% endblock %}
+{% block services %}{% endblock %}
+{% block footer %}{% endblock %}

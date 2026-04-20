@@ -1,0 +1,379 @@
+#register.html
+{% extends 'index.html' %}
+
+{% block main %}
+<style>
+    .registration-section {
+        padding: 120px 0 80px;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .registration-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+    }
+    
+    .registration-info {
+        padding-right: 40px;
+    }
+    
+    .registration-title {
+        font-size: 3rem;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #e0a3ff 0%, #ff69b4 30%, #9370db 60%, #e0a3ff 100%);
+        background-size: 300% 300%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: modernGradient 8s ease infinite;
+        line-height: 1.1;
+    }
+    
+    .registration-subtitle {
+        font-size: 1.2rem;
+        color: #cccccc;
+        margin-bottom: 2rem;
+        line-height: 1.6;
+    }
+    
+    .features-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-top: 2rem;
+    }
+    
+    .feature-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+    
+    .feature-icon {
+        color: #e0a3ff;
+        margin-right: 12px;
+        margin-top: 2px;
+        font-size: 1.2rem;
+    }
+    
+    .feature-text {
+        color: #cccccc;
+        font-size: 0.95rem;
+    }
+    
+    .registration-form-wrapper {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
+    .form-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .form-title {
+        font-size: 1.8rem;
+        margin-bottom: 0.5rem;
+        color: #ffffff;
+    }
+    
+    .form-subtitle {
+        color: #cccccc;
+        font-size: 1rem;
+    }
+    
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #ffffff;
+    }
+    
+    .form-input {
+        width: 100%;
+        padding: 15px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        color: #ffffff;
+        font-family: inherit;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .form-input:focus {
+        outline: none;
+        border-color: #e0a3ff;
+        box-shadow: 0 0 0 2px rgba(224, 163, 255, 0.3);
+    }
+    
+    .form-row {
+        display: flex;
+        gap: 15px;
+    }
+    
+    .form-row .form-group {
+        flex: 1;
+    }
+    
+    .password-requirements {
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+        color: #999;
+    }
+    
+    .terms-group {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 1.5rem;
+    }
+    
+    .terms-checkbox {
+        margin-right: 10px;
+        margin-top: 3px;
+    }
+    
+    .terms-text {
+        font-size: 0.9rem;
+        color: #cccccc;
+    }
+    
+    .terms-link {
+        color: #e0a3ff;
+        text-decoration: none;
+    }
+    
+    .terms-link:hover {
+        text-decoration: underline;
+    }
+    
+    .submit-btn {
+        width: 100%;
+        padding: 16px;
+        background: linear-gradient(135deg, #e0a3ff, #ff69b4);
+        border: none;
+        border-radius: 10px;
+        color: #000;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 1.5rem;
+    }
+    
+    .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(224, 163, 255, 0.3);
+    }
+    
+    .login-link {
+        text-align: center;
+        font-size: 0.9rem;
+        color: #cccccc;
+    }
+    
+    .login-link a {
+        color: #e0a3ff;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    
+    .login-link a:hover {
+        text-decoration: underline;
+    }
+    
+    @keyframes modernGradient {
+        0% {
+            background-position: 0% 50%;
+        }
+        50% {
+            background-position: 100% 50%;
+        }
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        .registration-container {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+        
+        .registration-info {
+            padding-right: 0;
+            text-align: center;
+        }
+        
+        .features-grid {
+            grid-template-columns: 1fr;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .registration-title {
+            font-size: 2.2rem;
+        }
+        
+        .registration-form-wrapper {
+            padding: 30px 25px;
+        }
+        
+        .form-row {
+            flex-direction: column;
+            gap: 0;
+        }
+    }
+</style>
+
+<section class="registration-section" id="register">
+    <div class="registration-container">
+        <div class="registration-info">
+            <h1 class="registration-title">Join the Quantum Security Revolution</h1>
+            <p class="registration-subtitle">
+                Create your account to access the future of cryptographic security. Our Heisenberg group-based signatures provide unparalleled protection against quantum threats.
+            </p>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span class="feature-text">Post-quantum cryptographic security</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span class="feature-text">Heisenberg group-based digital signatures</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span class="feature-text">Military-grade encryption protocols</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span class="feature-text">Zero-knowledge authentication</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span class="feature-text">Secure key generation</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">✓</span>
+                    <span class="feature-text">Multi-factor authentication</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="registration-form-wrapper glass">
+            <div class="form-header">
+                {% if messages %}
+                {% for message in messages %}
+                <p style="text-align: center;">{{message}}</p>
+                {% endfor %}
+                {% endif %}
+
+                <h2 class="form-title">Create Account</h2>
+                <p class="form-subtitle">Join our secure network today</p>
+            </div>
+            
+            <form class="registration-form" id="registrationForm" action="{% url 'register' %}" method="post">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" class="form-input" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="email">Email Address</label>
+                    <input type="email" id="email" name="email" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="username">Username</label>
+                    <input type="text" id="username" name="username" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-input" required>
+                    <div class="password-requirements">
+                        Must be at least 8 characters with uppercase, lowercase, and numbers
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" required>
+                </div>
+                
+                <div class="terms-group">
+                    <input type="checkbox" id="terms" class="terms-checkbox" required>
+                    <label for="terms" class="terms-text">
+                        I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="terms-link">Privacy Policy</a>
+                    </label>
+                </div>
+                
+                <button type="submit" class="submit-btn">Create Secure Account</button>
+                
+                <div class="login-link">
+                    Already have an account? <a href="{% url 'login' %}">Sign in here</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<script>
+document.getElementById('registrationForm').addEventListener('submit', function(e) {
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    // Password match validation
+    if (password !== confirmPassword) {
+        e.preventDefault(); // prevent form submission
+        alert('Passwords do not match');
+        return;
+    }
+
+    // Password complexity validation
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!passwordRegex.test(password)) {
+        e.preventDefault();
+        alert('Password must be at least 8 characters with uppercase, lowercase, and numbers');
+        return;
+    }
+
+    // Allow form to submit to backend
+});
+</script>
+{% endblock %}
+
+{% block about %}
+{% endblock %}
+
+{% block services %}
+{% endblock %}
